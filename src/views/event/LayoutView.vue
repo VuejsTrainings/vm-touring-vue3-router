@@ -21,12 +21,9 @@ onMounted(() => {
     <div v-if="event">
         <h1>{{ event.title }}</h1>
         <nav>
-            <RouterLink :to="{ name:'event-details', params: { id } }"
-            > Details </RouterLink> |
-            <RouterLink :to="{ name:'event-register', params: { id } }"
-            > Register </RouterLink> |
-            <RouterLink :to="{ name:'event-edit', params: { id } }"
-            > Edit </RouterLink>
+            <RouterLink :to="{ name:'event-details' }"> Details </RouterLink> |
+            <RouterLink :to="{ name:'event-register' }"> Register </RouterLink> |
+            <RouterLink :to="{ name:'event-edit' }"> Edit </RouterLink>
         </nav>
 
         <RouterView :event="event"/>
