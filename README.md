@@ -1,6 +1,6 @@
-# vm-real-world-vue
+# vm-touring-vue3-router
 
-This template should help get you started developing with Vue 3 in Vite.
+Training app about Vue Router 4, used with Vue 3.
 
 ## Recommended IDE Setup
 
