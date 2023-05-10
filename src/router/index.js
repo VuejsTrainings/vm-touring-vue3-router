@@ -4,6 +4,8 @@ import EventDetailView from '@/views/event/DetailView.vue'
 import EventRegisterView from '@/views/event/RegisterView.vue'
 import EventEditView from '@/views/event/EditView.vue'
 import EventLayoutView from '@/views/event/LayoutView.vue'
+import NotFound from '@/views/NotFoundView.vue'
+import NetworkError from '@/views/NetWorkErrorView.vue'
 import AboutView from '@/views/AboutView.vue'
 
 const router = createRouter({
@@ -60,7 +62,22 @@ const router = createRouter({
       // Aliasing, mais pais idéal pour le SEO (contenu duppliqué à 2 adresses)
       alias:'/about'
     },
-
+    {
+      path: "/:catchOtherRoutes(.*)",
+      component: NotFound,
+      props: route => ({ resource: `/${route.params.catchOtherRoutes} page` })
+    },
+    {
+      path: "/404/:resource",
+      name:'404-resource',
+      component: NotFound,
+      props: true
+    },
+    {
+      path: "/networkError",
+      name:'network-error',
+      component: NetworkError
+    },
   ]
 })
 
