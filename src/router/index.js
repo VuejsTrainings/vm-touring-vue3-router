@@ -5,7 +5,7 @@ import EventRegisterView from '@/views/event/RegisterView.vue'
 import EventEditView from '@/views/event/EditView.vue'
 import EventLayoutView from '@/views/event/LayoutView.vue'
 import NotFound from '@/views/NotFoundView.vue'
-import NetworkError from '@/views/NetWorkErrorView.vue'
+import NetworkError from '@/views/NetworkErrorView.vue'
 import AboutView from '@/views/AboutView.vue'
 
 const router = createRouter({
