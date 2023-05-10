@@ -48,7 +48,11 @@ const router = createRouter({
     {
       path: '/events/:id',
       // permet un éventuel filtre ou redéfinition des paramètres à transmettre avec la redirection
-      redirect: to => ({ name: 'event-details', params: { id: to.params.id} })
+      redirect: { name: 'event-details' },
+      children : [
+        {path: '/events/:id/register', redirect:{ name: 'event-register'}},
+        {path: '/events/:id/edit', redirect:{ name: 'event-edit'}},
+      ]
     },
     {
       path: '/about-us',
