@@ -9,7 +9,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'event-list',
-      component: EventListView
+      component: EventListView, 
+      props: (route) => {
+        return {
+          page: parseInt(route.query.page) || 1
+        }
+      }
     },
     {
       path: '/events/:id',

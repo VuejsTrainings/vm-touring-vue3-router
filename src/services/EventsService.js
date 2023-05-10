@@ -9,8 +9,8 @@ const baseAxios = axios.create({
     }
 })
 export default { 
-    getEvents() {
-        return baseAxios.get('/events');
+    getEvents(perPage, page) {
+        return baseAxios.get(`/events?_limit=${perPage}&_page=${page}`);
     },
     getEvent(id) { 
         return baseAxios.get(`/events/${id}`);
