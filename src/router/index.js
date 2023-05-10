@@ -20,7 +20,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/events/:id',
+      path: '/event/:id',
       name: 'event-layout',
       component: EventLayoutView,
       props: true, 
@@ -44,6 +44,10 @@ const router = createRouter({
           props: true, 
         },
       ]
+    },
+    {
+      path: '/events/:id',
+      redirect: { name: 'event-details' }
     },
     {
       path: '/about-us',
