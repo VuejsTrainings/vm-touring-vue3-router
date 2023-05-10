@@ -31,19 +31,16 @@ const router = createRouter({
           path: '',
           name: 'event-details',
           component: EventDetailView,
-           
         },
         {
           path: 'register',
           name: 'event-register',
           component: EventRegisterView,
-          props: true, 
         },
         {
           path: 'edit',
           name: 'event-edit',
           component: EventEditView,
-          props: true, 
         },
       ]
     },
