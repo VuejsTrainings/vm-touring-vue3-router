@@ -61,6 +61,7 @@ const router = createRouter({
           path: 'edit',
           name: 'event-edit',
           component: EventEditView,
+          meta: { requiresAuth: true },
         },
       ]
     },
@@ -98,8 +99,20 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach( () => {
+router.beforeEach( (to,from) => {
   NProgress.start();
+
+  const isAuthorized = false;
+  if ( to.meta.requiresAuth && !isAuthorized ){
+    GStore.flashMessage = "You're not authorized for this operation!"
+    setTimeout(() => {
+      GStore.flashMessage = ''
+    },3000);
+    if(from.href)
+      return false;
+    else
+      return {name: 'event-list'}
+  }
 })
 router.afterEach( () => {
   NProgress.done();
