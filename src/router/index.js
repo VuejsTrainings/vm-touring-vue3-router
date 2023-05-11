@@ -8,6 +8,11 @@ import NotFound from '@/views/NotFoundView.vue'
 import NetworkError from '@/views/NetworkErrorView.vue'
 import AboutView from '@/views/AboutView.vue'
 
+import NProgress from 'nprogress';
+
+import EventsService from '@/services/EventsService.js';
+import GStore from '@/stores/index';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,6 +31,21 @@ const router = createRouter({
       name: 'event-layout',
       component: EventLayoutView,
       props: true, 
+      beforeEnter: to => {
+        return EventsService
+          .getEvent( to.params.id )
+          .then (res => {
+            GStore.event = res.data
+          })
+          .catch( err => {
+              console.log(err)
+              if(err.reponse && err.response.status == 404){
+                  return ({ name: '404-resource', params: { resource: 'event' }});
+              } else  {
+                  return ({ name: 'network-error' });
+              }
+          });
+      },
       children: [
         {
           path: '',
@@ -76,6 +96,13 @@ const router = createRouter({
       component: NetworkError
     },
   ]
+})
+
+router.beforeEach( () => {
+  NProgress.start();
+})
+router.afterEach( () => {
+  NProgress.done();
 })
 
 export default router

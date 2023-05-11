@@ -13,6 +13,15 @@ export default {
         return baseAxios.get(`/events?_limit=${perPage}&_page=${page}`);
     },
     getEvent(id) { 
-        return baseAxios.get(`/events/${id}`);
+        return new Promise((resolve, reject) => {
+            setTimeout(
+                () => {
+                    baseAxios.get(`/events/${id}`)
+                    .then((res) => resolve(res))
+                    .catch((err) => reject(err))
+                },
+                2500
+            );
+        });
     }
 };

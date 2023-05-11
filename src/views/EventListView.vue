@@ -2,7 +2,6 @@
   import EventCard from '@/components/EventCard.vue';
   import EventsService from '@/services/EventsService.js';
   import { defineComponent } from 'vue';
-  import NProgress from 'nprogress';
 
 export default defineComponent({
   components:{
@@ -29,8 +28,6 @@ export default defineComponent({
     }
   },
   beforeRouteEnter( to, from, next ){
-        // events.value = null;
-        NProgress.start();
         EventsService
           .getEvents(2, parseInt(to.query.page) || 1 )
           .then( res => {
@@ -41,15 +38,10 @@ export default defineComponent({
           })
           .catch( () => {
             next({name: 'network-error'});
-          })
-          .finally(() => {
-            NProgress.done();
           });
   },
   beforeRouteUpdate( to ){
-        // events.value = null;
-        NProgress.start();
-        EventsService
+        return EventsService
           .getEvents(2, parseInt(to.query.page) || 1 )
           .then( res => {
               this.events = res.data;
@@ -58,9 +50,6 @@ export default defineComponent({
           .catch( () => {
             return {name: 'network-error'};
           })
-          .finally(() => {
-            NProgress.done();
-          });
   }
 });
 </script>
