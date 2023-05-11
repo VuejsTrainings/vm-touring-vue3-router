@@ -45,6 +45,22 @@ export default defineComponent({
           .finally(() => {
             NProgress.done();
           });
+  },
+  beforeRouteUpdate( to ){
+        // events.value = null;
+        NProgress.start();
+        EventsService
+          .getEvents(2, parseInt(to.query.page) || 1 )
+          .then( res => {
+              this.events = res.data;
+              this.totalEvents = res.headers['x-total-count'];
+          })
+          .catch( () => {
+            return {name: 'network-error'};
+          })
+          .finally(() => {
+            NProgress.done();
+          });
   }
 });
 </script>
