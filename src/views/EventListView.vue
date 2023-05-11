@@ -1,45 +1,48 @@
-<script setup>
+<script>
   import EventCard from '@/components/EventCard.vue';
-  import { ref, computed } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
   import EventsService from '@/services/EventsService.js';
+  import { defineComponent } from 'vue';
 
-  const router = useRouter();
-  const route = useRoute();
-
-  const events = ref(null);
-  const totalEvents = ref(0);
-  
-  const props = defineProps({
+export default defineComponent({
+  components:{
+    EventCard,
+  },
+  data(){
+      return {
+        events: null,
+        totalEvents: 0,
+      }
+  },
+  props: {
     page: {
       type: Number,
       required: true
     }
-  });
-
-  const totalPages = computed(() => {
-    return Math.ceil(totalEvents.value / 2);
-  })
-
-  const hasNextPage = computed(() => {
-    return props.page < totalPages.value;
-  })
-
-  const useRouteBeforeEnter = () => {
-      events.value = null;
-      EventsService
-        .getEvents(2, parseInt(route.query.page) || 1 )
-        .then( res => {
-            events.value = res.data;
-            totalEvents.value = res.headers['x-total-count'];
-        })
-        .catch( () => {
-          router.push({name: 'network-error'});
-        });
-  };
-  useRouteBeforeEnter();
+  },
+  computed: {
+    hasNextPage() {
+      return this.page < this.totalPages;
+    },
+    totalPages(){
+      return Math.ceil(this.totalEvents / 2);
+    }
+  },
+  beforeRouteEnter( to, from, next ){
+        // events.value = null;
+        EventsService
+          .getEvents(2, parseInt(to.query.page) || 1 )
+          .then( res => {
+              next((comp) => {
+                comp.events = res.data;
+                comp.totalEvents = res.headers['x-total-count'];
+              })
+          })
+          .catch( () => {
+            next({name: 'network-error'});
+          });
+  }
+});
 </script>
-
 <template>
   <main>
     <h1>Events for good</h1>
@@ -48,8 +51,8 @@
       
       <div class="pagination">
         <RouterLink
-          :to="{ query: {page: props.page - 1} }"
-          v-if="props.page != 1"
+          :to="{ query: {page: page - 1} }"
+          v-if="page != 1"
           class="prev"
           rel="prev"
         >&lt; Previous</RouterLink>
@@ -61,7 +64,7 @@
           > {{ pageIndex }} </RouterLink>
         </div>
         <RouterLink
-          :to="{ query: {page: props.page + 1} }"
+          :to="{ query: {page: page + 1} }"
           rel="next"
           class="next"
           v-if="hasNextPage"
