@@ -1,7 +1,11 @@
 <script setup>
   import EventCard from '@/components/EventCard.vue';
-  import { ref, onMounted, watchEffect, computed } from 'vue';
+  import { ref, computed } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
   import EventsService from '@/services/EventsService.js';
+
+  const router = useRouter();
+  const route = useRoute();
 
   const events = ref(null);
   const totalEvents = ref(0);
@@ -21,20 +25,19 @@
     return props.page < totalPages.value;
   })
 
-  onMounted(() => {
-    watchEffect(() => {
+  const useRouteBeforeEnter = () => {
       events.value = null;
       EventsService
-        .getEvents(2, props.page)
+        .getEvents(2, parseInt(route.query.page) || 1 )
         .then( res => {
-          events.value = res.data;
-          totalEvents.value = res.headers['x-total-count'];
+            events.value = res.data;
+            totalEvents.value = res.headers['x-total-count'];
         })
-        .catch(err => {
-          console.log(err)
+        .catch( () => {
+          router.push({name: 'network-error'});
         });
-    })
-  })
+  };
+  useRouteBeforeEnter();
 </script>
 
 <template>
